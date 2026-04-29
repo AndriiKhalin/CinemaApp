@@ -10,6 +10,6 @@ Welcome to the project!
 * 📁 **docs**: Project requirements and screenshots.
 
 ## How to start
-1. Clone this repository: `git clone [your-github-link]`
+1. Clone this repository: `git clone https://github.com/AndriiKhalin/CinemaApp.git`
 2. Go to your assigned folder.
 3. Read the comments in your files to see your tasks!
