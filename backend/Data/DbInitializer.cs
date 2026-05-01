@@ -12,7 +12,8 @@ public class DbInitializer
         {
             Title = "Inception",
             Genre = "Sci-Fi",
-            Duration = 148
+            Duration = 148,
+            PosterUrl = "https://example.com/inception.jpg"
         };
 
         context.Movies.Add(movie);
