@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260501144850_InitialCreate")]
+    [Migration("20260501182218_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace CinemaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinema");
+                    b.ToTable("Cinemas");
                 });
 
             modelBuilder.Entity("CinemaApi.Models.Hall", b =>
