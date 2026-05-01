@@ -33,7 +33,7 @@ namespace CinemaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinema");
+                    b.ToTable("Cinemas");
                 });
 
             modelBuilder.Entity("CinemaApi.Models.Hall", b =>
