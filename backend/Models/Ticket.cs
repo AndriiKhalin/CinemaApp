@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace CinemaApi.Models
@@ -8,17 +9,24 @@ namespace CinemaApi.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public int SessionId { get; set; }
 
-        public string CustomerEmail { get; set; }
-        public string CustomerName { get; set; }
+        [Required, EmailAddress, MaxLength(200)]
+        public required string CustomerEmail { get; set; }
 
+        [Required, MaxLength(200)]
+        public required string CustomerName { get; set; }
+
+        [Range(1, int.MaxValue)]
         public int Row { get; set; }
+
+        [Range(1, int.MaxValue)]
         public int SeatNumber { get; set; }
 
         public bool IsPaid { get; set; }
 
 
-        public Session Session { get; set; }
+        public required Session Session { get; set; }
     }
 }
