@@ -12,4 +12,12 @@ public class AppDbContext : DbContext
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<Cinema> Cinemas { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Ticket>()
+            .HasIndex(t => new { t.SessionId, t.Row, t.SeatNumber })
+            .IsUnique();
+    }
 }

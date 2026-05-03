@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260501182218_InitialCreate")]
+    [Migration("20260503180302_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -50,6 +50,7 @@ namespace CinemaApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SeatsPerRow")
@@ -76,14 +77,17 @@ namespace CinemaApi.Migrations
 
                     b.Property<string>("Genre")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PosterUrl")
                         .IsRequired()
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(300)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -126,10 +130,12 @@ namespace CinemaApi.Migrations
 
                     b.Property<string>("CustomerEmail")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsPaid")
@@ -146,7 +152,8 @@ namespace CinemaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionId");
+                    b.HasIndex("SessionId", "Row", "SeatNumber")
+                        .IsUnique();
 
                     b.ToTable("Tickets");
                 });

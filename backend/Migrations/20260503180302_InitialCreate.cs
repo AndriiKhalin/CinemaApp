@@ -31,10 +31,10 @@ namespace CinemaApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Genre = table.Column<string>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", maxLength: 300, nullable: false),
+                    Genre = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Duration = table.Column<int>(type: "INTEGER", nullable: false),
-                    PosterUrl = table.Column<string>(type: "TEXT", nullable: false)
+                    PosterUrl = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,7 +48,7 @@ namespace CinemaApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     CinemaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     TotalRows = table.Column<int>(type: "INTEGER", nullable: false),
                     SeatsPerRow = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -98,8 +98,8 @@ namespace CinemaApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SessionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CustomerEmail = table.Column<string>(type: "TEXT", nullable: false),
-                    CustomerName = table.Column<string>(type: "TEXT", nullable: false),
+                    CustomerEmail = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    CustomerName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Row = table.Column<int>(type: "INTEGER", nullable: false),
                     SeatNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     IsPaid = table.Column<bool>(type: "INTEGER", nullable: false)
@@ -131,9 +131,10 @@ namespace CinemaApi.Migrations
                 column: "MovieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tickets_SessionId",
+                name: "IX_Tickets_SessionId_Row_SeatNumber",
                 table: "Tickets",
-                column: "SessionId");
+                columns: new[] { "SessionId", "Row", "SeatNumber" },
+                unique: true);
         }
 
         /// <inheritdoc />
