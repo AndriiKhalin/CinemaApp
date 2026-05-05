@@ -1,4 +1,8 @@
-﻿namespace CinemaApi.DTOs.Seat;
-
-// Status: 0 = Free, 1 = Booked
-public record SeatDto();
+﻿namespace CinemaApi.DTOs.Seat
+{
+    public class SeatDto
+    {
+        public int Row { get; set; }
+        public int Number { get; set; }
+    }
+}

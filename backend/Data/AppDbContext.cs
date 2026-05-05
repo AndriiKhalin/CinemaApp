@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CinemaApi.Models;
+
 namespace CinemaApi.Data;
 
 public class AppDbContext : DbContext
@@ -12,6 +13,10 @@ public class AppDbContext : DbContext
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<Cinema> Cinemas { get; set; }
 
+
+    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<BookedSeat> BookedSeats { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -19,5 +24,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Ticket>()
             .HasIndex(t => new { t.SessionId, t.Row, t.SeatNumber })
             .IsUnique();
+
+ 
+        modelBuilder.Entity<BookedSeat>()
+            .HasOne(bs => bs.Booking)
+            .WithMany(b => b.BookedSeats)
+            .HasForeignKey(bs => bs.BookingId);
     }
 }

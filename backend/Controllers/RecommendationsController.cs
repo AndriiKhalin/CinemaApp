@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace CinemaApi.Controllers
 {
@@ -7,14 +8,42 @@ namespace CinemaApi.Controllers
     [ApiController]
     public class RecommendationsController : ControllerBase
     {
-        // TODO: Inject RecommendationService or HttpClient
+        private readonly IHttpClientFactory _httpClientFactory;
+
+
+        public RecommendationsController(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
 
         // GET /api/recommendations/{genre}
         [HttpGet("{genre}")]
         public async Task<IActionResult> GetByGenre(string genre)
         {
-            // TODO: Call Python FastAPI service and return JSON
-            throw new NotImplementedException();
+            try
+            {
+
+                var client = _httpClientFactory.CreateClient();
+
+
+                var pythonServiceUrl = $"http://localhost:8000/recommendations/{genre}";
+
+                var response = await client.GetAsync(pythonServiceUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var recommendations = JsonSerializer.Deserialize<object>(content);
+                    return Ok(recommendations);
+                }
+
+                return StatusCode((int)response.StatusCode, "Python service is unavailable");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal error: {ex.Message}");
+            }
         }
     }
 }

@@ -1,4 +1,11 @@
-﻿namespace CinemaApi.DTOs.Booking;
+﻿using CinemaApi.DTOs.Seat;
 
-//TODO : Define fields for creating a booking (e.g., SessionId, CustomerName,etc.) + SelectedSeats (List of seat numbers)
-public record CreateBookingRequest();
+namespace CinemaApi.DTOs.Booking
+{
+    public class CreateBookingRequest
+    {
+        public int SessionId { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public List<SeatDto> Seats { get; set; } = new();
+    }
+}

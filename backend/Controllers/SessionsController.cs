@@ -2,63 +2,121 @@
 using CinemaApi.DTOs.Seat;
 using CinemaApi.DTOs.Session;
 using CinemaApi.Interfaces;
-using Microsoft.AspNetCore.Http;
+using CinemaApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SessionsController(AppDbContext context, ISeatMapService seatMapService) : ControllerBase
+    public class SessionsController : ControllerBase
     {
-        // GET /api/sessions
-        // GET /api/sessions?movieId=3
-        [HttpGet]
-        public async Task<List<SessionResponseDto>> GetAll([FromQuery] int? movieId)
+        private readonly AppDbContext _context;
+        private readonly ISeatMapService _seatMapService;
+
+        public SessionsController(AppDbContext context, ISeatMapService seatMapService)
         {
-            // REQUIREMENT: Return all sessions that start in the future.
-            // If movieId is provided, filter to only sessions for that movie.
-            // Include Hall and Movie in the result so the frontend has all the info.
-            // Hint: .Include(s => s.Movie).Include(s => s.Hall)
-            //       .Where(s => s.StartTime > DateTime.UtcNow)
-            throw new NotImplementedException();
+            _context = context;
+            _seatMapService = seatMapService;
+        }
+
+        // GET /api/sessions
+        [HttpGet]
+        public async Task<ActionResult<List<SessionResponseDto>>> GetAll([FromQuery] int? movieId)
+        {
+            var query = _context.Sessions
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .Where(s => s.StartTime > DateTime.UtcNow)
+                .AsNoTracking();
+
+            if (movieId.HasValue)
+            {
+                query = query.Where(s => s.MovieId == movieId.Value);
+            }
+
+            var sessions = await query.ToListAsync();
+
+            var response = sessions.Select(s => new SessionResponseDto
+            {
+                Id = s.Id,
+                StartTime = s.StartTime,
+                TicketPrice = s.TicketPrice,
+                MovieTitle = s.Movie.Title,
+                HallName = s.Hall.Name
+            }).ToList();
+
+            return Ok(response);
         }
 
         // GET /api/sessions/5
         [HttpGet("{id}")]
-        public async Task<SessionResponseDto> GetById(int id)
+        public async Task<ActionResult<SessionResponseDto>> GetById(int id)
         {
-            // REQUIREMENT: Return one session with Movie and Hall included. 404 if not found.
-            // Hint: use FirstOrDefaultAsync instead of FindAsync so you can chain Include.
-            throw new NotImplementedException();
+            var session = await _context.Sessions
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (session == null) return NotFound();
+
+            return Ok(new SessionResponseDto
+            {
+                Id = session.Id,
+                StartTime = session.StartTime,
+                TicketPrice = session.TicketPrice,
+                MovieTitle = session.Movie.Title,
+                HallName = session.Hall.Name
+            });
         }
 
         // GET /api/sessions/5/seats
-        // Returns the seat grid: hall dimensions + list of already-booked seats.
         [HttpGet("{id}/seats")]
-        public async Task<SeatDto> GetSeats(int id)
+        public async Task<ActionResult<SeatMapResponseDto>> GetSeats(int id)
         {
-            // call service to get the seat map for this session. The service will return null if the session doesn't exist, so return 404 in that case.
-            throw new NotImplementedException();
+            var seatMap = await _seatMapService.GetSeatMapAsync(id);
+
+            if (seatMap == null) return NotFound("Session not found.");
+
+            return Ok(seatMap);
         }
 
         // POST /api/sessions
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SessionRequestDto dto)
         {
-            // REQUIREMENT: Validate that MovieId and HallId exist in the DB before saving.
-            // If either is not found, return BadRequest with a descriptive message.
-            // Map dto → Session, add, SaveChangesAsync, return CreatedAtAction.
-            // Hint: var movieExists = await _context.Movies.AnyAsync(m => m.Id == dto.MovieId);
-            throw new NotImplementedException();
+            var movieExists = await _context.Movies.AnyAsync(m => m.Id == dto.MovieId);
+            var hallExists = await _context.Halls.AnyAsync(h => h.Id == dto.HallId);
+
+            if (!movieExists) return BadRequest("No movie with this ID was found.");
+            if (!hallExists) return BadRequest("No movie with this ID was found.");
+
+            var session = new Session
+            {
+                MovieId = dto.MovieId,
+                HallId = dto.HallId,
+                StartTime = dto.StartTime,
+                TicketPrice = dto.TicketPrice
+            };
+
+            _context.Sessions.Add(session);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetById), new { id = session.Id }, session);
         }
 
         // DELETE /api/sessions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            // REQUIREMENT: Delete the session. Return 404 if not found, 204 on success.
-            throw new NotImplementedException();
+            var session = await _context.Sessions.FindAsync(id);
+            if (session == null) return NotFound();
+
+            _context.Sessions.Remove(session);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

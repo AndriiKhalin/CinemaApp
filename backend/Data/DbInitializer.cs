@@ -30,21 +30,21 @@ public class DbInitializer
             {
                 Title = "Inception",
                 Genre = "Sci-Fi",
-                Duration = 148,
+                DurationMinutes = 148,
                 PosterUrl = "https://example.com/inception.jpg"
             },
             new Movie
             {
                 Title = "Interstellar",
                 Genre = "Sci-Fi",
-                Duration = 169,
+                DurationMinutes = 169,
                 PosterUrl = "https://example.com/interstellar.jpg"
             },
             new Movie
             {
                 Title = "The Dark Knight",
                 Genre = "Action",
-                Duration = 152,
+                DurationMinutes = 152,
                 PosterUrl = "https://example.com/darkknight.jpg"
             }
         };

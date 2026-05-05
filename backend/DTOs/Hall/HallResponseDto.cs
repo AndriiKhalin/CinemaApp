@@ -1,4 +1,10 @@
-﻿namespace CinemaApi.DTOs.Hall;
-
-//TODO : Define properties for HallResponseDto. It should include Id, Name, Rows, and SeatsPerRow. You can add more if needed (e.g. Location).
-public record HallResponseDto();
+﻿namespace CinemaApi.DTOs.Hall
+{
+    public class HallResponseDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public int TotalRows { get; set; }
+        public int SeatsPerRow { get; set; }
+    }
+}

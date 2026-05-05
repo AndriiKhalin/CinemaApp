@@ -1,6 +1,9 @@
-﻿namespace CinemaApi.Interfaces;
+﻿using CinemaApi.DTOs.Seat;
 
-public interface ISeatMapService
+namespace CinemaApi.Interfaces
 {
-    //TODO : Define method signatures for seat map management. This could include methods like GetSeatMapAsync(int hallId), UpdateSeatMapAsync(int hallId, SeatMapUpdateDto updateDto), etc.
+    public interface ISeatMapService
+    {
+        Task<SeatMapResponseDto?> GetSeatMapAsync(int sessionId);
+    }
 }
