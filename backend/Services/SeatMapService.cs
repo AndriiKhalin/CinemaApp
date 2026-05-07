@@ -1,12 +1,40 @@
-﻿namespace CinemaApi.Services;
+﻿using CinemaApi.Data;
+using CinemaApi.Interfaces;
+using CinemaApi.DTOs.Seat; 
+using Microsoft.EntityFrameworkCore;
 
-public class SeatMapService
+namespace CinemaApi.Services
 {
-    // REQUIREMENT: Return enough data for JS to draw the seat map.
-    // 1. Load the session with its Hall.
-    // 2. Query all BookedSeats where Booking.SessionId == id.
-    // 3. Return an anonymous object:
-    //    { rows, seatsPerRow, takenSeats: [{seatRow, seatNumber}] }
-    // Hint: _context.BookedSeats.Where(bs => bs.Booking.SessionId == id)
-    //       .Select(bs => new { bs.SeatRow, bs.SeatNumber })
+    public class SeatMapService(AppDbContext context) : ISeatMapService
+    {
+
+        public async Task<SeatMapResponseDto?> GetSeatMapAsync(int sessionId)
+        {
+            var session = await context.Sessions
+                .Include(s => s.Hall)
+                .FirstOrDefaultAsync(s => s.Id == sessionId);
+
+            if (session == null || session.Hall == null)
+            {
+                return null;
+            }
+
+           var takenSeats = await context.Tickets
+                .Where(t => t.SessionId == sessionId)
+                .Select(t => new SeatSelectionDto
+                {
+                    Row = t.Row,
+                    Number = t.SeatNumber
+                })
+                .ToListAsync();
+
+
+            return new SeatMapResponseDto
+            {
+                TotalRows = session.Hall.TotalRows,
+                SeatsPerRow = session.Hall.SeatsPerRow,
+                BookedSeats = takenSeats
+            };
+        }
+    }
 }

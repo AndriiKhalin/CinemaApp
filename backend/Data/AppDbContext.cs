@@ -14,8 +14,6 @@ public class AppDbContext : DbContext
     public DbSet<Cinema> Cinemas { get; set; }
 
 
-    public DbSet<Booking> Bookings { get; set; }
-    public DbSet<BookedSeat> BookedSeats { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,10 +23,5 @@ public class AppDbContext : DbContext
             .HasIndex(t => new { t.SessionId, t.Row, t.SeatNumber })
             .IsUnique();
 
- 
-        modelBuilder.Entity<BookedSeat>()
-            .HasOne(bs => bs.Booking)
-            .WithMany(b => b.BookedSeats)
-            .HasForeignKey(bs => bs.BookingId);
     }
 }

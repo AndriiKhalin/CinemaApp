@@ -8,50 +8,40 @@ namespace CinemaApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MoviesController : ControllerBase
+    public class MoviesController(AppDbContext context) : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public MoviesController(AppDbContext context)
-        {
-            _context = context;
-        }
-
-        // GET /api/movies
         [HttpGet]
         public async Task<ActionResult<List<MovieResponseDto>>> GetAll([FromQuery] string? genre)
         {
-            var query = _context.Movies.AsNoTracking().AsQueryable();
+            var query = context.Movies.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrEmpty(genre))
             {
                 query = query.Where(m => m.Genre == genre);
             }
 
-            var movies = await query.ToListAsync();
-
-            var response = movies.Select(m => new MovieResponseDto
+            var movies = await query.Select(m => new MovieResponseDto
             {
                 Id = m.Id,
                 Title = m.Title,
                 Genre = m.Genre,
                 DurationMinutes = m.DurationMinutes,
-                Description = m.Description
-            }).ToList();
+                Description = m.Description,
+                ImageUrl = m.PosterUrl // Використовуємо твій PosterUrl
+            }).ToListAsync();
 
-            return Ok(response);
+            return Ok(movies);
         }
 
-        // GET /api/movies/5
         [HttpGet("{id:int}")]
         public async Task<ActionResult<MovieResponseDto>> GetById(int id)
         {
-            var movie = await _context.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await context.Movies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { message = $"Фільм з ID {id} не знайдено." });
 
             return Ok(new MovieResponseDto
             {
@@ -59,11 +49,11 @@ namespace CinemaApi.Controllers
                 Title = movie.Title,
                 Genre = movie.Genre,
                 DurationMinutes = movie.DurationMinutes,
-                Description = movie.Description
+                Description = movie.Description,
+                ImageUrl = movie.PosterUrl // Використовуємо твій PosterUrl
             });
         }
 
-        // POST /api/movies
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MovieRequestDto dto)
         {
@@ -72,50 +62,53 @@ namespace CinemaApi.Controllers
                 Title = dto.Title,
                 Genre = dto.Genre,
                 DurationMinutes = dto.DurationMinutes,
-                Description = dto.Description
+                Description = dto.Description,
+                PosterUrl = dto.ImageUrl ?? string.Empty // Мапимо з DTO в модель
             };
 
-            _context.Movies.Add(movie);
-            await _context.SaveChangesAsync();
+            context.Movies.Add(movie);
+            await context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = movie.Id }, movie);
+            var response = new MovieResponseDto
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Genre = movie.Genre,
+                DurationMinutes = movie.DurationMinutes,
+                Description = movie.Description,
+                ImageUrl = movie.PosterUrl
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = movie.Id }, response);
         }
 
-        // PUT /api/movies/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] MovieRequestDto dto)
         {
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await context.Movies.FindAsync(id);
 
             if (movie == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { message = "Фільм не знайдено." });
 
             movie.Title = dto.Title;
             movie.Genre = dto.Genre;
             movie.DurationMinutes = dto.DurationMinutes;
             movie.Description = dto.Description;
+            movie.PosterUrl = dto.ImageUrl ?? string.Empty;
 
-            await _context.SaveChangesAsync();
-
+            await context.SaveChangesAsync();
             return NoContent();
         }
 
-        // DELETE /api/movies/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await context.Movies.FindAsync(id);
 
-            if (movie == null)
-            {
-                return NotFound();
-            }
+            if (movie == null) return NotFound();
 
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
-
+            context.Movies.Remove(movie);
+            await context.SaveChangesAsync();
             return NoContent();
         }
     }

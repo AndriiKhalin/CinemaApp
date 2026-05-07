@@ -6,6 +6,7 @@ namespace CinemaApi.DTOs.Booking
     {
         public int SessionId { get; set; }
         public string Email { get; set; } = string.Empty;
-        public List<SeatDto> Seats { get; set; } = new();
+
+        public List<SeatSelectionDto> Seats { get; set; } = new();
     }
 }
