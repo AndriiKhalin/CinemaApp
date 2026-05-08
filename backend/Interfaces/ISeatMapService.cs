@@ -1,9 +1,8 @@
 ﻿using CinemaApi.DTOs.Seat;
 
-namespace CinemaApi.Interfaces
+namespace CinemaApi.Interfaces;
+
+public interface ISeatMapService
 {
-    public interface ISeatMapService
-    {
-        Task<SeatMapResponseDto?> GetSeatMapAsync(int sessionId);
-    }
+    Task<SeatMapResponseDto?> GetSeatMapAsync(int sessionId);
 }

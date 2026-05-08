@@ -1,9 +1,8 @@
 ﻿using CinemaApi.Models;
 
-namespace CinemaApi.Interfaces
+namespace CinemaApi.Interfaces;
+
+public interface ITicketService
 {
-    public interface ITicketService
-    {
-        Task<Ticket?> BookTicketAsync(Ticket ticket);
-    }
+    Task<Ticket?> BookTicketAsync(Ticket ticket);
 }

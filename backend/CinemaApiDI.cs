@@ -1,9 +1,22 @@
-﻿namespace CinemaApi;
+﻿using CinemaApi.Interfaces;
+using CinemaApi.Services;
+using CinemaApi.Settings;
+
+namespace CinemaApi;
 
 public static class CinemaApiDI
 {
-    public static void AddCinemaApiServices(this IServiceCollection services)
+    public static void AddCinemaApiServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // TODO: register services here (examples below):
+        // All Services
+        services.AddScoped<ISeatMapService, SeatMapService>();
+        services.AddScoped<ITicketService, TicketService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IRecommendationService, RecommendationService>();
+
+        // RecommendationService
+        services.AddHttpClient<IRecommendationService, RecommendationService>();
+        services.Configure<RecommendationSettings>(
+            configuration.GetSection("RecommendationService"));
     }
 }

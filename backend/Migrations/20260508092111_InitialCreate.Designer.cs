@@ -11,62 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260505185700_FixRemainingModels")]
-    partial class FixRemainingModels
+    [Migration("20260508092111_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.7");
-
-            modelBuilder.Entity("CinemaApi.Models.BookedSeat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SeatNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SeatRow")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
-
-                    b.ToTable("BookedSeats");
-                });
-
-            modelBuilder.Entity("CinemaApi.Models.Booking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CustomerEmail")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SessionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SessionId");
-
-                    b.ToTable("Bookings");
-                });
 
             modelBuilder.Entity("CinemaApi.Models.Cinema", b =>
                 {
@@ -210,28 +162,6 @@ namespace CinemaApi.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("CinemaApi.Models.BookedSeat", b =>
-                {
-                    b.HasOne("CinemaApi.Models.Booking", "Booking")
-                        .WithMany("BookedSeats")
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-                });
-
-            modelBuilder.Entity("CinemaApi.Models.Booking", b =>
-                {
-                    b.HasOne("CinemaApi.Models.Session", "Session")
-                        .WithMany()
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Session");
-                });
-
             modelBuilder.Entity("CinemaApi.Models.Hall", b =>
                 {
                     b.HasOne("CinemaApi.Models.Cinema", "Cinema")
@@ -271,11 +201,6 @@ namespace CinemaApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Session");
-                });
-
-            modelBuilder.Entity("CinemaApi.Models.Booking", b =>
-                {
-                    b.Navigation("BookedSeats");
                 });
 
             modelBuilder.Entity("CinemaApi.Models.Cinema", b =>
