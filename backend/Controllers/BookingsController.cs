@@ -1,7 +1,6 @@
 ﻿using CinemaApi.Data;
 using CinemaApi.DTOs.Booking;
 using CinemaApi.Interfaces;
-using CinemaApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,14 +12,21 @@ public class BookingsController(AppDbContext context, ITicketService ticketServi
     : ControllerBase
 {
     // GET: api/Bookings
-
-    [HttpGet]
-    public async Task<ActionResult<List<Ticket>>> GetAll()
+    [HttpGet("/api/admin/bookings")]
+    public async Task<ActionResult<List<BookingResponseDto>>> GetAll()
     {
         var tickets = await context.Tickets
             .AsNoTracking()
             .Include(t => t.Session)
             .ThenInclude(s => s.Movie)
+            .Select(t => new BookingResponseDto
+            {
+                TicketId = t.Id,
+                SessionId = t.SessionId,
+                Row = t.Row,
+                SeatNumber = t.SeatNumber,
+                PurchasedAt = t.CreateDateTime
+            })
             .ToListAsync();
 
         return Ok(tickets);
@@ -28,33 +34,21 @@ public class BookingsController(AppDbContext context, ITicketService ticketServi
 
     // POST: api/Bookings
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateBookingRequest request)
+    [HttpPost("/api/bookings")]
+    public async Task<IActionResult> Create([FromBody] CreateBookingRequest request, CancellationToken ct)
     {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
         if (request.Seats == null || !request.Seats.Any())
             return BadRequest("Please select at least one seat.");
 
-        var sessionExists = await context.Sessions.AnyAsync(s => s.Id == request.SessionId);
-        if (!sessionExists) return NotFound("Session not found");
+        var session = await context.Sessions.FirstOrDefaultAsync(s => s.Id == request.SessionId, ct);
+        if (session == null) return NotFound("Session not found");
 
-        foreach (var seat in request.Seats)
-        {
-            var ticket = new Ticket
-            {
-                SessionId = request.SessionId,
-                Row = seat.Row,
-                SeatNumber = seat.Number,
-                CustomerEmail = request.Email,
-                CustomerName = "Guest",
-                Session = null!
-            };
+        var result = await ticketService.BookTicketsAsync(request, session, ct);
+        if (!result.Success) return BadRequest(result.Error);
 
-            var booked = await ticketService.BookTicketAsync(ticket);
-            if (booked == null)
-                return BadRequest("One or more selected seats are already booked");
-
-            await emailService.SendBookingConfirmationAsync(booked);
-        }
+        foreach (var ticket in result.Tickets)
+            await emailService.SendBookingConfirmationAsync(ticket);
 
         return Ok(new { Message = "Booking completed successfully!" });
     }

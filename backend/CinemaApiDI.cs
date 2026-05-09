@@ -12,7 +12,6 @@ public static class CinemaApiDI
         services.AddScoped<ISeatMapService, SeatMapService>();
         services.AddScoped<ITicketService, TicketService>();
         services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IRecommendationService, RecommendationService>();
 
         // RecommendationService
         services.AddHttpClient<IRecommendationService, RecommendationService>();

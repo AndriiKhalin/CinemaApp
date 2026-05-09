@@ -129,6 +129,9 @@ namespace CinemaApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreateDateTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CustomerEmail")
                         .IsRequired()
                         .HasMaxLength(200)

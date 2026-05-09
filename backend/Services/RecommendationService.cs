@@ -11,9 +11,6 @@ public class RecommendationService(
 {
     private readonly RecommendationSettings _settings = settings.Value;
 
-    // TODO: Use HttpClient to call Python service
-    // Example: Task<string> GetByGenreAsync(string genre)
-    // Don't forget realised also interface IRecommendationService
     public async Task<JsonElement> GetByGenreAsync(string genre, CancellationToken ct)
     {
         var url = $"{_settings.BaseUrl.TrimEnd('/')}/recommendations/{Uri.EscapeDataString(genre)}";
@@ -21,8 +18,8 @@ public class RecommendationService(
         var response = await httpClient.GetAsync(url, ct);
         response.EnsureSuccessStatusCode();
 
-        using var stream = await response.Content.ReadAsStreamAsync(ct);
-        var json = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
+        await using var stream = await response.Content.ReadAsStreamAsync(ct);
+        using var json = await JsonDocument.ParseAsync(stream, cancellationToken: ct);
 
         return json.RootElement.Clone();
     }

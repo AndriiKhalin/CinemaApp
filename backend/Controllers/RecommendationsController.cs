@@ -8,7 +8,7 @@ namespace CinemaApi.Controllers;
 public class RecommendationsController(IRecommendationService recommendationService) : ControllerBase
 {
     // GET /api/recommendations/{genre}
-    [HttpGet("{genre}")]
+    [HttpGet("/api/recommendations/{genre}")]
     public async Task<IActionResult> GetByGenre(string genre, CancellationToken ct)
     {
         try

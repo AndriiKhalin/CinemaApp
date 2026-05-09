@@ -13,7 +13,9 @@ public class EmailService(IConfiguration configuration, AppDbContext context) : 
     {
         var from = configuration["EmailSettings:From"] ?? "yourcinema@gmail.com";
         var password = configuration["EmailSettings:Password"] ?? "";
-        var enabled = bool.Parse(configuration["EmailSettings:Enabled"] ?? "false");
+        var enabled = bool.TryParse(configuration["EmailSettings:Enabled"], out var isEnabled) && isEnabled;
+        var host = configuration["EmailSettings:Host"] ?? "smtp.gmail.com";
+        var port = int.TryParse(configuration["EmailSettings:Port"], out var p) ? p : 587;
 
 
         if (ticket.Session == null) await context.Entry(ticket).Reference(t => t.Session).LoadAsync();
@@ -47,7 +49,7 @@ public class EmailService(IConfiguration configuration, AppDbContext context) : 
         using var smtp = new SmtpClient();
         try
         {
-            await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+            await smtp.ConnectAsync(host, port, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(from, password);
             await smtp.SendAsync(msg);
         }

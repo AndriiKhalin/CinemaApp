@@ -10,7 +10,7 @@ namespace CinemaApi.Controllers;
 [ApiController]
 public class MoviesController(AppDbContext context) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("/api/movies")]
     public async Task<ActionResult<List<MovieResponseDto>>> GetAll([FromQuery] string? genre)
     {
         var query = context.Movies.AsNoTracking().AsQueryable();
@@ -30,7 +30,7 @@ public class MoviesController(AppDbContext context) : ControllerBase
         return Ok(movies);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("/api/movies/{id:int}")]
     public async Task<ActionResult<MovieResponseDto>> GetById(int id)
     {
         var movie = await context.Movies
@@ -51,7 +51,7 @@ public class MoviesController(AppDbContext context) : ControllerBase
         });
     }
 
-    [HttpPost]
+    [HttpPost("/api/admin/movies")]
     public async Task<IActionResult> Create([FromBody] MovieRequestDto dto)
     {
         var movie = new Movie
@@ -79,7 +79,7 @@ public class MoviesController(AppDbContext context) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = movie.Id }, response);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("/api/admin/movies/{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] MovieRequestDto dto)
     {
         var movie = await context.Movies.FindAsync(id);
@@ -97,7 +97,7 @@ public class MoviesController(AppDbContext context) : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("/api/admin/movies/{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var movie = await context.Movies.FindAsync(id);
