@@ -17,8 +17,6 @@ public class BookingsController(AppDbContext context, ITicketService ticketServi
     {
         var tickets = await context.Tickets
             .AsNoTracking()
-            .Include(t => t.Session)
-            .ThenInclude(s => s.Movie)
             .Select(t => new BookingResponseDto
             {
                 TicketId = t.Id,
@@ -47,9 +45,21 @@ public class BookingsController(AppDbContext context, ITicketService ticketServi
         var result = await ticketService.BookTicketsAsync(request, session, ct);
         if (!result.Success) return BadRequest(result.Error);
 
-        foreach (var ticket in result.Tickets)
-            await emailService.SendBookingConfirmationAsync(ticket);
+        var failedEmails = new List<int>();
 
-        return Ok(new { Message = "Booking completed successfully!" });
+        foreach (var ticket in result.Tickets)
+            try
+            {
+                await emailService.SendBookingConfirmationAsync(ticket);
+            }
+            catch (Exception ex)
+            {
+                failedEmails.Add(ticket.Id);
+                Console.WriteLine($"Email failed for ticket {ticket.Id}: {ex.Message}");
+            }
+
+        return failedEmails.Count == 0
+            ? Ok(new { Message = "Booking completed successfully!" })
+            : Ok(new { Message = "Booking completed, but some emails failed.", FailedTicketIds = failedEmails });
     }
 }

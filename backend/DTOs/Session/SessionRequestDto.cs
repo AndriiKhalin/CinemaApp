@@ -10,7 +10,7 @@ public class SessionRequestDto
 
     [Required(ErrorMessage = "HallId is required")]
     [Range(1, int.MaxValue)]
-    public int? HallId { get; set; } = 0;
+    public int? HallId { get; set; }
 
     [Required(ErrorMessage = "Start time is required")]
     public DateTime? StartTime { get; set; }

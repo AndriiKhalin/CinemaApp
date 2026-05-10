@@ -1,4 +1,5 @@
-﻿using CinemaApi.Data;
+﻿using System.Text.Encodings.Web;
+using CinemaApi.Data;
 using CinemaApi.Interfaces;
 using CinemaApi.Models;
 using MailKit.Net.Smtp;
@@ -34,15 +35,20 @@ public class EmailService(IConfiguration configuration, AppDbContext context) : 
         var msg = new MimeMessage();
         msg.From.Add(new MailboxAddress("Cinema", from));
         msg.To.Add(new MailboxAddress(ticket.CustomerName, ticket.CustomerEmail));
-        msg.Subject = $"Your ticket — {ticket.Session?.Movie?.Title}";
+
+        var movieTitle = HtmlEncoder.Default.Encode(ticket.Session?.Movie?.Title ?? "Unknown");
+        var timeText = HtmlEncoder.Default.Encode(ticket.Session?.StartTime.ToString("dd MMM yyyy HH:mm") ?? "");
+        var rowText = HtmlEncoder.Default.Encode(ticket.Row.ToString());
+        var seatText = HtmlEncoder.Default.Encode(ticket.SeatNumber.ToString());
+        msg.Subject = $"Your ticket — {movieTitle}";
 
         msg.Body = new TextPart("html")
         {
             Text = $@"
                     <h2>Booking #{ticket.Id} confirmed!</h2>
-                    <p><b>Movie:</b> {ticket.Session?.Movie?.Title}</p>
-                    <p><b>Time:</b> {ticket.Session?.StartTime:dd MMM yyyy HH:mm}</p>
-                    <p><b>Seat:</b> Row {ticket.Row}, Number {ticket.SeatNumber}</p>
+                    <p><b>Movie:</b> {movieTitle}</p>
+                    <p><b>Time:</b> {timeText}</p>
+                    <p><b>Seat:</b> Row {rowText}, Number {seatText}</p>
                     <p>Thank you for choosing our cinema!</p>"
         };
 

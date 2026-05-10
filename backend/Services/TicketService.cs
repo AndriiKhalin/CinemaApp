@@ -2,6 +2,7 @@
 using CinemaApi.DTOs.Booking;
 using CinemaApi.Interfaces;
 using CinemaApi.Models;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaApi.Services;
@@ -29,7 +30,8 @@ public class TicketService(AppDbContext context) : ITicketService
             await context.SaveChangesAsync(ct);
             return (true, null, tickets);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex) when (ex.InnerException is SqliteException sqlite &&
+                                           sqlite.SqliteErrorCode == 19)
         {
             return (false, "One or more selected seats are already booked", Array.Empty<Ticket>());
         }

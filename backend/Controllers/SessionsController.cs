@@ -17,7 +17,7 @@ public class SessionsController(AppDbContext context) : ControllerBase
         var query = context.Sessions
             .Include(s => s.Movie)
             .Include(s => s.Hall)
-            .Where(s => s.StartTime > DateTime.UtcNow)
+            .Where(s => s.StartTime > DateTime.Now)
             .AsNoTracking();
 
         if (movieId.HasValue) query = query.Where(s => s.MovieId == movieId.Value);
