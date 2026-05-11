@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace CinemaApi.Models;
 
-namespace CinemaApi.Models
+public class Cinema
 {
-    public class Cinema
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public required string Name { get; set; }
-        public required string Address { get; set; }
+    public required string Name { get; set; }
+    public required string Address { get; set; }
 
-        public List<Hall> Halls { get; set; } = new();
-    }
+    public List<Hall> Halls { get; set; } = new();
 }

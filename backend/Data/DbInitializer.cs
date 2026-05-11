@@ -2,7 +2,7 @@
 
 namespace CinemaApi.Data;
 
-public class DbInitializer
+public static class DbInitializer
 {
     public static void Initialize(AppDbContext context)
     {
@@ -26,25 +26,25 @@ public class DbInitializer
 
         var movies = new List<Movie>
         {
-            new Movie
+            new()
             {
                 Title = "Inception",
                 Genre = "Sci-Fi",
-                Duration = 148,
+                DurationMinutes = 148,
                 PosterUrl = "https://example.com/inception.jpg"
             },
-            new Movie
+            new()
             {
                 Title = "Interstellar",
                 Genre = "Sci-Fi",
-                Duration = 169,
+                DurationMinutes = 169,
                 PosterUrl = "https://example.com/interstellar.jpg"
             },
-            new Movie
+            new()
             {
                 Title = "The Dark Knight",
                 Genre = "Action",
-                Duration = 152,
+                DurationMinutes = 152,
                 PosterUrl = "https://example.com/darkknight.jpg"
             }
         };
@@ -53,12 +53,12 @@ public class DbInitializer
         var today = DateTime.Today;
         var sessions = new List<Session>
         {
-            new Session { Movie = movies[0], Hall = hall, StartTime = today.AddHours(14), TicketPrice = 200 },
-            new Session { Movie = movies[1], Hall = hall, StartTime = today.AddHours(17), TicketPrice = 220 },
-            new Session { Movie = movies[2], Hall = hall, StartTime = today.AddHours(20), TicketPrice = 210 },
+            new() { Movie = movies[0], Hall = hall, StartTime = today.AddHours(14), TicketPrice = 200 },
+            new() { Movie = movies[1], Hall = hall, StartTime = today.AddHours(17), TicketPrice = 220 },
+            new() { Movie = movies[2], Hall = hall, StartTime = today.AddHours(20), TicketPrice = 210 },
 
-            new Session { Movie = movies[0], Hall = hall, StartTime = today.AddDays(1).AddHours(16), TicketPrice = 200 },
-            new Session { Movie = movies[1], Hall = hall, StartTime = today.AddDays(1).AddHours(19), TicketPrice = 220 }
+            new() { Movie = movies[0], Hall = hall, StartTime = today.AddDays(1).AddHours(16), TicketPrice = 200 },
+            new() { Movie = movies[1], Hall = hall, StartTime = today.AddDays(1).AddHours(19), TicketPrice = 220 }
         };
 
         context.Cinemas.Add(cinema);

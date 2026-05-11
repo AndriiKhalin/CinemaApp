@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CinemaApi.Models
+namespace CinemaApi.Models;
+
+public class Hall
 {
-    public class Hall
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        [Required]
-        public int CinemaId { get; set; }
+    [Required] public int CinemaId { get; set; }
 
-        [Required, MaxLength(200)]
-        public string Name { get; set; } = string.Empty;
+    [Required] [MaxLength(200)] public string Name { get; set; } = string.Empty;
 
-        [Range(1, int.MaxValue)]
-        public int TotalRows { get; set; }
+    [Range(1, int.MaxValue)] public int TotalRows { get; set; }
 
-        [Range(1, int.MaxValue)]
-        public int SeatsPerRow { get; set; }
+    [Range(1, int.MaxValue)] public int SeatsPerRow { get; set; }
 
-        public Cinema? Cinema { get; set; }
-        public List<Session> Sessions { get; set; } = new();
-    }
+    public Cinema? Cinema { get; set; }
+    public List<Session> Sessions { get; set; } = new();
 }

@@ -33,7 +33,8 @@ namespace CinemaApi.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", maxLength: 300, nullable: false),
                     Genre = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Duration = table.Column<int>(type: "INTEGER", nullable: false),
+                    DurationMinutes = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
                     PosterUrl = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false)
                 },
                 constraints: table =>
@@ -102,7 +103,8 @@ namespace CinemaApi.Migrations
                     CustomerName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Row = table.Column<int>(type: "INTEGER", nullable: false),
                     SeatNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsPaid = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsPaid = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreateDateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
