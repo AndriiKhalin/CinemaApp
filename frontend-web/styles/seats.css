@@ -1,0 +1,77 @@
+.seats-header {
+  margin-bottom: 16px;
+}
+
+.seats-subtitle {
+  color: var(--muted);
+}
+
+.seats-legend {
+  display: flex;
+  gap: 18px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.legend-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.legend-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #777;
+}
+
+.legend-box.free { background: var(--seat-free); }
+.legend-box.booked { background: var(--seat-booked); }
+.legend-box.selected { background: var(--seat-selected); }
+
+.screen-pill {
+  width: 60%;
+  margin: 0 auto 18px;
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 999px;
+  background: #5d5d5d;
+}
+
+.seats-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 28px);
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.seat {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--seat-free);
+  border: none;
+}
+
+.seat.booked { background: var(--seat-booked); }
+.seat.selected { background: var(--seat-selected); }
+
+.checkout-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.selected-seats {
+  font-size: 14px;
+}
+
+.total-price {
+  font-size: 20px;
+}
