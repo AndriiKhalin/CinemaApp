@@ -12,6 +12,10 @@ public class TicketService(AppDbContext context) : ITicketService
     public async Task<(bool Success, string? Error, IReadOnlyList<Ticket> Tickets)>
         BookTicketsAsync(CreateBookingRequest request, Session session, CancellationToken ct)
     {
+        var seatKeys = request.Seats.Select(s => (s.Row, s.Number)).ToList();
+        if (seatKeys.Count != seatKeys.Distinct().Count())
+            return (false, "Duplicate seats in request", Array.Empty<Ticket>());
+
         var tickets = request.Seats.Select(seat => new Ticket
         {
             SessionId = session.Id,

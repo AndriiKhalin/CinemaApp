@@ -80,16 +80,18 @@ public class SessionsController(AppDbContext context) : ControllerBase
         context.Sessions.Add(session);
         await context.SaveChangesAsync();
 
-        var response = new SessionResponseDto
-        {
-            Id = session.Id,
-            StartTime = session.StartTime,
-            TicketPrice = session.TicketPrice,
-            MovieTitle = await context.Movies.AsNoTracking().Where(m => m.Id == session.MovieId).Select(m => m.Title)
-                .FirstAsync(),
-            HallName = await context.Halls.AsNoTracking().Where(h => h.Id == session.HallId).Select(h => h.Name)
-                .FirstAsync()
-        };
+        var response = await context.Sessions
+            .AsNoTracking()
+            .Where(s => s.Id == session.Id)
+            .Select(s => new SessionResponseDto
+            {
+                Id = s.Id,
+                StartTime = s.StartTime,
+                TicketPrice = s.TicketPrice,
+                MovieTitle = s.Movie!.Title,
+                HallName = s.Hall!.Name
+            })
+            .FirstAsync();
 
         // Повертаємо 201 Created та посилання на новий об'єкт
         return CreatedAtAction(nameof(GetById), new { id = session.Id }, response);

@@ -1,9 +1,14 @@
-﻿namespace CinemaApi.DTOs.Hall;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CinemaApi.DTOs.Hall;
 
 public class HallRequestDto
 {
-    public string Name { get; set; } = string.Empty;
-    public int TotalRows { get; set; }
-    public int SeatsPerRow { get; set; }
-    public int CinemaId { get; set; }
+    [Required][StringLength(100)] public string Name { get; set; } = string.Empty;
+
+    [Range(1, int.MaxValue)] public int TotalRows { get; set; }
+
+    [Range(1, int.MaxValue)] public int SeatsPerRow { get; set; }
+
+    [Range(1, int.MaxValue)] public int CinemaId { get; set; }
 }

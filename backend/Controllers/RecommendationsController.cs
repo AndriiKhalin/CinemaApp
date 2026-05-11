@@ -1,4 +1,5 @@
-﻿using CinemaApi.Interfaces;
+﻿using System.Text.Json;
+using CinemaApi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaApi.Controllers;
@@ -15,6 +16,14 @@ public class RecommendationsController(IRecommendationService recommendationServ
         {
             var json = await recommendationService.GetByGenreAsync(genre, ct);
             return Ok(json);
+        }
+        catch (TaskCanceledException)
+        {
+            return StatusCode(503, new { message = "Recommendation service timeout." });
+        }
+        catch (JsonException)
+        {
+            return StatusCode(502, new { message = "Recommendation service returned invalid response." });
         }
         catch (HttpRequestException)
         {

@@ -8,7 +8,7 @@ using MimeKit;
 
 namespace CinemaApi.Services;
 
-public class EmailService(IConfiguration configuration, AppDbContext context) : IEmailService
+public class EmailService(IConfiguration configuration, AppDbContext context, IHostEnvironment env) : IEmailService
 {
     public async Task SendBookingConfirmationAsync(Ticket ticket)
     {
@@ -26,9 +26,12 @@ public class EmailService(IConfiguration configuration, AppDbContext context) : 
 
         if (!enabled)
         {
-            Console.WriteLine(
-                $"[EMAIL MOCK] To: {ticket.CustomerEmail} | Booking #{ticket.Id} | Movie: {ticket.Session?.Movie?.Title}");
-            await Task.CompletedTask;
+            if (env.IsDevelopment())
+            {
+                var masked = ticket.CustomerEmail.Split('@')[0];
+                Console.WriteLine($"[EMAIL MOCK] To: {masked}@*** | Booking #{ticket.Id}");
+            }
+
             return;
         }
 

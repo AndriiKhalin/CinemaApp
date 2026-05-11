@@ -12,7 +12,7 @@ public class CreateBookingRequest
     [MaxLength(200)]
     public string Email { get; set; } = string.Empty;
 
-    [Required] [MaxLength(200)] public string CustomerName { get; set; } = string.Empty;
+    [Required][MaxLength(200)] public string CustomerName { get; set; } = string.Empty;
 
-    public List<SeatRequestDto> Seats { get; set; } = new();
+    [Required][MinLength(1)] public List<SeatRequestDto> Seats { get; set; } = new();
 }
