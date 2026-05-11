@@ -1,0 +1,19 @@
+.genre-picker {
+  max-width: 520px;
+}
+
+.reco-card {
+  background: var(--panel);
+  border-radius: 22px;
+  padding: 18px;
+  height: 100%;
+}
+
+.reco-title {
+  font-size: 18px;
+}
+
+.reco-meta {
+  color: var(--muted);
+  font-size: 13px;
+}

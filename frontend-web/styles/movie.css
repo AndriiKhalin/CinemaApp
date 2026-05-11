@@ -1,0 +1,61 @@
+.movie-hero {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.movie-poster-placeholder {
+  width: 220px;
+  aspect-ratio: 3 / 4;
+  border-radius: 20px;
+  background: #d9d9d9;
+}
+
+.movie-hero-body {
+  padding-right: 10px;
+}
+
+.movie-title {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.movie-desc {
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.movie-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.meta-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--pill);
+  font-size: 12px;
+}
+
+.sessions-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.session-btn {
+  border-radius: 16px;
+  border: 1px solid var(--outline);
+  background: transparent;
+  color: var(--text);
+  padding: 10px;
+}
+
+@media (max-width: 992px) {
+  .movie-hero {
+    grid-template-columns: 1fr;
+  }
+}

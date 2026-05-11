@@ -1,0 +1,16 @@
+.cinema-card {
+  background: var(--panel);
+  border-radius: 22px;
+  padding: 18px;
+  height: 100%;
+}
+
+.cinema-title {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.cinema-address {
+  color: var(--muted);
+  font-size: 13px;
+}

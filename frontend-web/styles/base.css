@@ -1,0 +1,164 @@
+:root {
+  --bg: #141414;
+  --panel: #1f1f1f;
+  --panel-soft: #262626;
+  --text: #f2f2f2;
+  --muted: #b3b3b3;
+  --outline: #3f3f3f;
+  --pill: #3a3a3a;
+  --accent: #4a4a4a;
+  --accent-2: #5a5a5a;
+  --seat-free: #bfbfbf;
+  --seat-booked: #4f4f4f;
+  --seat-selected: #3b3b3b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  color: var(--text);
+  background: radial-gradient(80% 80% at 50% 0%, #2a2a2a 0%, #111111 60%, #0b0b0b 100%);
+  min-height: 100vh;
+}
+
+.app-bg {
+  background-color: var(--bg);
+}
+
+.app-topbar {
+  padding: 16px 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.brand {
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+  color: var(--text);
+}
+
+.app-main {
+  padding: 28px 0 60px;
+}
+
+.page-title {
+  font-family: "Playfair Display", serif;
+  font-size: 34px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.card-surface {
+  background: var(--panel);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+}
+
+.search-wrap {
+  position: relative;
+  width: 420px;
+  max-width: 55vw;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 44px 10px 16px;
+  border-radius: 999px;
+  background: #1c1c1c;
+  border: 1px solid var(--outline);
+  color: var(--text);
+}
+
+.search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+}
+
+.search-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  position: relative;
+}
+
+.search-icon::after {
+  content: "";
+  width: 8px;
+  height: 2px;
+  background: var(--muted);
+  position: absolute;
+  right: -6px;
+  bottom: -2px;
+  transform: rotate(45deg);
+}
+
+.profile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #666;
+  position: relative;
+}
+
+.profile-icon::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid #666;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.btn-pill {
+  border-radius: 999px;
+  padding: 6px 16px;
+  background: transparent;
+  border: 1px solid var(--outline);
+  color: var(--text);
+}
+
+.top-links {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.top-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.top-links a:hover {
+  color: var(--text);
+}
+
+@media (max-width: 992px) {
+  .search-wrap {
+    width: 260px;
+  }
+  .page-title {
+    font-size: 28px;
+  }
+}
