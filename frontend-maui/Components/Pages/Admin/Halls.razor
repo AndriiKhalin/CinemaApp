@@ -1,0 +1,35 @@
+﻿@page "/admin/halls"
+@using CinemaAdmin.Components.Services
+@inject HallsService HallsService
+
+<h1>Halls</h1>
+
+<div class="admin-panel">
+    <div class="admin-form">
+        <h3>Create / Edit Hall</h3>
+        <!-- TODO: replace CinemaId input with dropdown from CinemasService -->
+        <input class="form-control" placeholder="Cinema Id"/>
+        <input class="form-control" placeholder="Hall Name"/>
+        <input class="form-control" placeholder="Total Rows"/>
+        <input class="form-control" placeholder="Seats Per Row"/>
+        <button class="btn btn-primary">Save</button>
+    </div>
+
+    <div class="admin-list">
+        <h3>All Halls</h3>
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th>Id</th><th>Name</th><th>Cinema</th><th>Rows</th><th>Seats/Row</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- TODO: render rows -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    // TODO: load data on init
+}
