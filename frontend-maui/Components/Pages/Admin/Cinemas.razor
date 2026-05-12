@@ -1,0 +1,32 @@
+﻿@page "/admin/cinemas"
+@using CinemaAdmin.Components.Services
+@inject CinemasService CinemasService
+
+<h1>Cinemas</h1>
+
+<div class="admin-panel">
+    <div class="admin-form">
+        <h3>Create / Edit Cinema</h3>
+        <input class="form-control" placeholder="Name"/>
+        <input class="form-control" placeholder="Address"/>
+        <button class="btn btn-primary">Save</button>
+    </div>
+
+    <div class="admin-list">
+        <h3>All Cinemas</h3>
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th>Id</th><th>Name</th><th>Address</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- TODO: render rows -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    // TODO: load data on init
+}
